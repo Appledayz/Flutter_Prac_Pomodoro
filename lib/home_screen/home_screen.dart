@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late Timer _timer;
   int totalSeconds = 1500;
+  bool isRunning = false;
 
   void onTick(Timer timer) {
     setState(() {
@@ -20,6 +21,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void onStartPressed() {
     _timer = Timer.periodic(const Duration(seconds: 1), onTick);
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  void onPausePressed() {
+    _timer.cancel();
+    setState(() {
+      isRunning = false;
+    });
   }
 
   @override
@@ -45,11 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
               flex: 3,
               child: Center(
                   child: IconButton(
-                onPressed: onStartPressed,
-                icon: const Icon(
-                  Icons.play_circle_outline,
+                onPressed: isRunning ? onPausePressed : onStartPressed,
+                icon: Icon(
+                  isRunning
+                      ? Icons.pause_circle_outline
+                      : Icons.play_circle_outline,
                   size: 100,
-                  color: Color(0xFF232B55),
+                  color: const Color(0xFF232B55),
                 ),
               )),
             ),
